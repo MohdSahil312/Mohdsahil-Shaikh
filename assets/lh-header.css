@@ -1,0 +1,70 @@
+/* Loomhaus — Header */
+.lh-header {
+  background: var(--lh-page);
+  border-bottom: 1px solid var(--lh-border);
+}
+.lh-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-block: 20px;
+}
+/* Logo and actions share a width so the header text sits in the true centre */
+.lh-header__logo,
+.lh-header__actions { flex: 0 0 262px; }
+.lh-header__logo {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--lh-ink);
+  text-decoration: none;
+}
+.lh-header__text {
+  font-size: 15px;
+  white-space: nowrap;
+}
+.lh-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+}
+.lh-header__cart {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 32px;
+  height: 30px;
+  color: var(--lh-ink);
+}
+.lh-header__cart-icon {
+  position: absolute;
+  left: 0;
+  top: 6px;
+}
+.lh-header__count {
+  position: absolute;
+  left: 14px;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--lh-accent);
+  color: var(--lh-white);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.lh-header__count[hidden] { display: none; }
+
+@media (max-width: 1099px) {
+  .lh-header__text { display: none; }
+  .lh-header__logo,
+  .lh-header__actions { flex-basis: auto; }
+}
+@media (max-width: 767px) {
+  .lh-header__inner { padding-block: 14px; }
+  .lh-header__logo { font-size: 24px; }
+  .lh-header__button { display: none; }
+}

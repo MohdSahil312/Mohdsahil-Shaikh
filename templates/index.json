@@ -1,75 +1,64 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "lh_hero": {
+      "type": "lh-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
+        "stat_reviews": { "type": "stat", "settings": { "value": "4.8★", "label": "2,000+ reviews" } },
+        "stat_cotton": { "type": "stat", "settings": { "value": "100%", "label": "organic cotton" } },
+        "stat_returns": { "type": "stat", "settings": { "value": "30 days", "label": "free returns" } }
       },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+      "block_order": ["stat_reviews", "stat_cotton", "stat_returns"],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "badge": "NEW SEASON  ·  AUTUMN / WINTER",
+        "heading": "The Winter Edit",
+        "text": "<p>Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.</p>",
+        "button_label": "Shop now",
+        "button_link": "shopify://collections/all",
+        "show_card": true,
+        "card_product": "yellow-wool-jumper",
+        "card_text": "Bestseller this week"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "lh_marquee": {
+      "type": "lh-marquee",
+      "blocks": {
+        "item_1": { "type": "item", "settings": { "text": "Organic cotton" } },
+        "item_2": { "type": "item", "settings": { "text": "Made to last" } },
+        "item_3": { "type": "item", "settings": { "text": "Sizes XS to L" } },
+        "item_4": { "type": "item", "settings": { "text": "Free returns" } },
+        "item_5": { "type": "item", "settings": { "text": "Ethically made" } }
+      },
+      "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5"],
+      "settings": { "duration": 36 }
+    },
+    "lh_shop_the_look": {
+      "type": "lh-shop-the-look",
+      "blocks": {
+        "tile_1": { "type": "tile", "settings": { "product": "ocean-blue-shirt", "x": 48, "y": 27, "mobile_x": 44, "mobile_y": 24 } },
+        "tile_2": { "type": "tile", "settings": { "product": "olive-green-jacket", "x": 52, "y": 39, "mobile_x": 49, "mobile_y": 36 } },
+        "tile_3": { "type": "tile", "settings": { "product": "navy-sport-jacket", "x": 39, "y": 33, "mobile_x": 36, "mobile_y": 30 } },
+        "tile_4": { "type": "tile", "settings": { "product": "striped-silk-blouse", "x": 48, "y": 27, "mobile_x": 44, "mobile_y": 24 } },
+        "tile_5": { "type": "tile", "settings": { "product": "led-high-tops", "x": 40, "y": 52, "mobile_x": 36, "mobile_y": 49 } },
+        "tile_6": { "type": "tile", "settings": { "product": "striped-skirt-and-top", "x": 48, "y": 65, "mobile_x": 44, "mobile_y": 62 } }
+      },
+      "block_order": ["tile_1", "tile_2", "tile_3", "tile_4", "tile_5", "tile_6"],
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "eyebrow": "SHOP THE LOOK",
+        "heading": "Loomhaus in the wild",
+        "helper": "Tap the + on any look to shop it."
+      }
+    },
+    "lh_featured_product": {
+      "type": "lh-featured-product",
+      "settings": {
+        "product": "classic-varsity-top",
+        "default_size": "M",
+        "tax_note": "MRP inclusive of all taxes",
+        "size_label": "SELECT SIZE",
+        "color_option": "Color",
+        "size_option": "Size"
       }
     }
   },
-  "order": [
-    "image_banner",
-    "featured_collection"
-  ]
+  "order": ["lh_hero", "lh_marquee", "lh_shop_the_look", "lh_featured_product"]
 }

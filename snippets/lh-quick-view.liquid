@@ -1,0 +1,47 @@
+{%- comment -%}
+  Loomhaus — Quick view popup (bottom sheet on mobile)
+  One shared popup for the page. A hotspot with data-lh-quick-view="<id>"
+  opens it with the product JSON rendered under that id
+  (snippets/lh-product-json.liquid). Behaviour: assets/lh-quick-view.js
+{%- endcomment -%}
+{{ 'lh-quick-view.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'lh-quick-view.js' | asset_url }}" defer="defer"></script>
+
+<lh-quick-view class="lh lh-qv">
+  <div class="lh-overlay" data-close></div>
+  <div class="lh-qv__dialog" role="dialog" aria-modal="true" aria-labelledby="LhQvTitle" tabindex="-1" hidden>
+    <span class="lh-qv__handle" aria-hidden="true"></span>
+    <img class="lh-qv__image" data-qv-image src="data:," alt="" width="240" height="337">
+    <div class="lh-qv__details">
+      <div class="lh-qv__top">
+        <div>
+          <p class="lh-qv__title lh-display" id="LhQvTitle" data-qv-title></p>
+          <p class="lh-qv__price" data-qv-price></p>
+        </div>
+        <button type="button" class="lh-qv__close" data-close aria-label="Close quick view">
+          {%- render 'lh-icon', icon: 'close' -%}
+        </button>
+      </div>
+      <p class="lh-qv__desc" data-qv-desc></p>
+
+      <div data-qv-color-group>
+        <p class="lh-qv__label" id="LhQvColorLabel">COLOR</p>
+        <div class="lh-qv__colors" role="group" aria-labelledby="LhQvColorLabel" data-qv-colors></div>
+      </div>
+
+      <div data-qv-size-group>
+        <label class="lh-qv__label" for="LhQvSize">SIZE</label>
+        <div class="lh-qv__select">
+          <select id="LhQvSize" data-qv-size aria-describedby="LhQvError"></select>
+          {%- render 'lh-icon', icon: 'chevron-down', class: 'lh-qv__chevron' -%}
+        </div>
+        <p class="lh-qv__error" id="LhQvError" data-qv-error hidden>Please choose a size.</p>
+      </div>
+
+      <button type="button" class="lh-btn lh-btn--primary lh-btn--square lh-btn--block" data-qv-add>
+        <span data-qv-add-label>Add to cart</span>
+        {%- render 'lh-icon', icon: 'arrow-right', class: 'lh-btn__arrow' -%}
+      </button>
+    </div>
+  </div>
+</lh-quick-view>

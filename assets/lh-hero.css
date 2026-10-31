@@ -1,0 +1,127 @@
+/* Loomhaus — Hero banner */
+.lh-hero { background: var(--lh-page); }
+.lh-hero__inner {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  padding-top: 72px;
+  padding-bottom: 80px;
+}
+.lh-hero__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.lh-hero__heading {
+  max-width: 560px;
+  font-size: clamp(56px, 6.12vw, 88px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.lh-hero__text {
+  max-width: 500px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--lh-text-2);
+}
+.lh-hero__stats {
+  display: flex;
+  gap: 40px;
+  padding-top: 16px;
+  white-space: nowrap;
+}
+.lh-hero__stat-value {
+  display: block;
+  font-size: 26px;
+  font-weight: 700;
+}
+.lh-hero__stat-label {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--lh-text-2);
+}
+
+/* Visual: 560 × 560 frame; children are positioned in % so it scales */
+.lh-hero__visual {
+  position: relative;
+  flex-shrink: 0;
+  width: clamp(420px, 38.9vw, 560px);
+  aspect-ratio: 1;
+}
+.lh-hero__circle {
+  position: absolute;
+  left: 10.714%;
+  top: 7.143%;
+  width: 89.286%;
+  height: 89.286%;
+  border-radius: 50%;
+  background: var(--lh-sec);
+}
+.lh-hero__image {
+  position: absolute;
+  left: 10.714%;
+  top: 1.786%;
+  width: 78.571%;
+  height: 96.429%;
+  object-fit: cover;
+  /* 220px top radius on a 440 × 540 image, written in % so it scales */
+  border-radius: 50% 50% 24px 24px / 40.74% 40.74% 24px 24px;
+  background: var(--lh-sec);
+}
+.lh-hero__card {
+  position: absolute;
+  left: 0;
+  top: 75%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: var(--lh-white);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  color: var(--lh-ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lh-hero__card-image {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.lh-hero__card-title { display: block; font-size: 14px; font-weight: 700; }
+.lh-hero__card-sub { display: block; margin-top: 2px; font-size: 12px; color: var(--lh-text-2); }
+
+@media (max-width: 1099px) {
+  .lh-hero__inner { flex-direction: column; align-items: stretch; gap: 40px; }
+  .lh-hero__visual { width: min(100%, 480px); align-self: center; }
+}
+
+@media (max-width: 767px) {
+  .lh-hero__inner { gap: 18px; padding-top: 32px; padding-bottom: 40px; }
+  .lh-hero__content { gap: 18px; }
+  .lh-hero__badge { padding: 5px 12px; font-size: 12px; }
+  .lh-hero__heading { font-size: 52px; letter-spacing: -0.02em; }
+  .lh-hero__text { font-size: 16px; }
+  .lh-hero__button { width: 100%; }
+  .lh-hero__stats { width: 100%; justify-content: space-between; gap: 12px; padding-top: 0; }
+  /* Mobile visual: 354 × 400 frame */
+  .lh-hero__visual { width: 100%; max-width: 420px; aspect-ratio: 354 / 400; }
+  .lh-hero__circle { left: 7.345%; top: 14%; width: 90.395%; height: 80%; }
+  .lh-hero__image {
+    left: 7.627%;
+    top: 0;
+    width: 84.746%;
+    height: 97.5%;
+    border-radius: 50% 50% 20px 20px / 38.46% 38.46% 20px 20px;
+  }
+  .lh-hero__card { display: none; }
+}
+@media (max-width: 359px) {
+  .lh-hero__heading { font-size: 44px; }
+}

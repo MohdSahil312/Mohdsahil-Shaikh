@@ -1,0 +1,120 @@
+/* Loomhaus — Shop the look */
+.lh-look { background: var(--lh-page); }
+.lh-look__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-block: 96px;
+}
+.lh-look__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.lh-look__eyebrow {
+  font: 400 14px/normal var(--lh-font-label);
+  letter-spacing: 0.08em;
+  color: var(--lh-accent);
+}
+.lh-look__heading {
+  margin-top: 10px;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.lh-look__helper { font-size: 16px; color: var(--lh-text-2); }
+
+.lh-look__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.lh-look__tile {
+  position: relative;
+  aspect-ratio: 400 / 480;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--lh-sec);
+}
+.lh-look__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+@media (hover: hover) {
+  .lh-look__tile:hover .lh-look__image { transform: scale(1.03); }
+}
+
+/* Hotspot: default 32px, grows on hover (Interactive states board) */
+.lh .lh-look__hotspot {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--lh-white);
+  color: var(--lh-ink);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
+  transition: transform 0.2s ease;
+}
+@media (hover: hover) {
+  .lh .lh-look__hotspot:hover { transform: scale(1.25); }
+}
+
+.lh-look__label {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 32px);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--lh-white);
+  color: var(--lh-ink);
+  font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lh-look__label-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.lh-look__label-price { font-weight: 700; }
+
+@media (max-width: 989px) {
+  .lh-look__tiles { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .lh-look__inner { gap: 20px; padding-block: 48px; }
+  .lh-look__head { display: block; }
+  .lh-look__eyebrow { font-size: 12px; }
+  .lh-look__heading { margin-top: 20px; font-size: 32px; }
+  .lh-look__helper { display: none; }
+  .lh-look__tiles { gap: 12px; }
+  .lh-look__tile { aspect-ratio: 171 / 220; border-radius: 14px; }
+  .lh .lh-look__hotspot {
+    left: var(--mx);
+    top: var(--my);
+    width: 25.6px;
+    height: 25.6px;
+    filter: drop-shadow(0 1.6px 3.2px rgba(0, 0, 0, 0.18));
+  }
+  .lh .lh-look__hotspot svg { width: 11.2px; height: 11.2px; }
+  .lh-look__label {
+    left: 8px;
+    bottom: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    max-width: calc(100% - 16px);
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+}

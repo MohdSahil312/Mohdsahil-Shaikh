@@ -1,0 +1,37 @@
+/* Loomhaus — Marquee strip */
+.lh-marquee {
+  overflow: hidden;
+  padding: 16px 0 16px 24px;
+  background: var(--lh-accent);
+}
+.lh-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: lh-marquee var(--lh-marquee-duration, 36s) linear infinite;
+}
+@media (hover: hover) {
+  .lh-marquee:hover .lh-marquee__track { animation-play-state: paused; }
+}
+/* Each group ends with a gap the size of the item gap, so both halves match */
+.lh-marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 28px;
+  padding-right: 28px;
+  color: var(--lh-white);
+  font-size: 17px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.lh-marquee__sep { color: var(--lh-sec); }
+
+@keyframes lh-marquee {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lh-marquee__track { animation: none; }
+}
+@media (max-width: 767px) {
+  .lh-marquee { padding: 12px 0 12px 14px; }
+  .lh-marquee__group { gap: 18px; padding-right: 18px; font-size: 14px; }
+}

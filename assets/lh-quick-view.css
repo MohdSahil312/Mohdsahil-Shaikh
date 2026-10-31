@@ -1,0 +1,153 @@
+/* Loomhaus — Quick view popup */
+.lh-qv__dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 210;
+  display: flex;
+  gap: 24px;
+  width: 612px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--lh-white);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translate(-50%, -48%);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.lh-qv__dialog[hidden] { display: none; }
+.lh-qv.is-open .lh-qv__dialog { opacity: 1; transform: translate(-50%, -50%); }
+.lh-qv__dialog:focus { outline: none; }
+.lh-qv__handle { display: none; }
+
+.lh-qv__image {
+  flex-shrink: 0;
+  width: 240px;
+  height: 337px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--lh-page);
+}
+.lh-qv__details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 300px;
+  min-width: 0;
+}
+.lh-qv__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.lh-qv__title { font-size: 22px; font-weight: 700; }
+.lh-qv__price { margin-top: 4px; font-size: 18px; font-weight: 600; }
+.lh .lh-qv__close { flex-shrink: 0; width: 22px; height: 22px; color: var(--lh-ink); }
+.lh-qv__desc { font-size: 13px; line-height: 1.5; color: var(--lh-text-2); }
+.lh-qv__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+[data-qv-color-group],
+[data-qv-size-group] { display: flex; flex-direction: column; gap: 14px; }
+[data-qv-color-group][hidden],
+[data-qv-size-group][hidden] { display: none; }
+
+/* Colour options: default / hover (dark outline) / selected */
+.lh-qv__colors { display: flex; gap: 12px; }
+.lh .lh-qv__color {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--lh-border);
+  border-radius: 8px;
+  background: var(--lh-white);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+@media (hover: hover) {
+  .lh .lh-qv__color:hover { border-color: var(--lh-ink); }
+}
+.lh .lh-qv__color[aria-pressed='true'] {
+  padding: 11.5px 13.5px;
+  border: 1.5px solid var(--lh-ink);
+  background: var(--lh-page);
+}
+.lh-qv__dot {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--lh-border);
+  border-radius: 50%;
+  background: var(--swatch, #ccc);
+}
+
+.lh-qv__select { position: relative; }
+.lh-qv__select select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 0;
+  padding: 10px 36px 10px 14px;
+  border: 1px solid var(--lh-ink);
+  border-radius: 6px;
+  background: var(--lh-white);
+  color: var(--lh-text-2);
+  font: 400 14px/normal var(--lh-font-body);
+  cursor: pointer;
+}
+.lh-qv__select select.is-chosen { color: var(--lh-ink); }
+.lh-qv__select select.is-error {
+  border-color: var(--lh-sale);
+  box-shadow: 0 0 0 3px rgba(139, 64, 56, 0.15);
+}
+.lh-qv__chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  color: var(--lh-ink);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.lh-qv__error { margin-top: -6px; font-size: 12px; color: var(--lh-sale); }
+.lh-qv__error[hidden] { display: none; }
+
+/* Mobile: bottom sheet */
+@media (max-width: 767px) {
+  .lh-qv__dialog {
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    padding: 12px 20px 28px;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+  }
+  .lh-qv.is-open .lh-qv__dialog { transform: translateY(0); }
+  .lh-qv__handle {
+    display: block;
+    align-self: center;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--lh-border);
+  }
+  .lh-qv__image { width: 100%; height: auto; aspect-ratio: 350 / 240; }
+  .lh-qv__details { width: 100%; }
+}

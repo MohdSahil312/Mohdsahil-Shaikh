@@ -1,0 +1,361 @@
+{%- comment -%}
+  Loomhaus — Featured product
+  ---------------------------------------------------------------
+  Data model (see the README section of the pull request):
+  - Compare-at price     → variant.compare_at_price (built-in field)
+  - "Save X%" badge      → calculated here in Liquid, per variant
+  - Badge                → product metafield custom.badge (single line text)
+  - Rating / count       → product metafields custom.product_rating (rating)
+                           and custom.product_rating_count (integer)
+  - Highlight box        → product metafield custom.highlight → metaobject "product_highlight"
+  - Colour swatches      → metaobjects of type "colour_swatch", matched by option value handle
+  - Size ribbon          → variant metafield custom.ribbon (single line text)
+  - Offer cards          → product metafield custom.offers → list of metaobjects "offer";
+                           "Get it for" is calculated here in Liquid for every variant
+
+  Every per-variant value is pre-computed below and passed to
+  assets/lh-featured-product.js as JSON, so switching colour/size updates the
+  page without a reload and without calculating prices in the browser.
+{%- endcomment -%}
+{{ 'lh-featured-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'lh-featured-product.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign product = section.settings.product
+  assign color_name = section.settings.color_option | default: 'Color' | downcase
+  assign size_name = section.settings.size_option | default: 'Size' | downcase
+
+  if product != blank
+    assign color_option = blank
+    assign size_option = blank
+    for option in product.options_with_values
+      assign option_name = option.name | downcase
+      if option_name == color_name
+        assign color_option = option
+      elsif option_name == size_name
+        assign size_option = option
+      endif
+    endfor
+
+    assign color_idx = color_option.position | minus: 1
+    assign size_idx = size_option.position | minus: 1
+
+    comment
+      Pre-selected variant: the size from the section setting (Figma shows M)
+      in the first available colour, falling back to the first available variant.
+    endcomment
+    assign current = product.selected_or_first_available_variant
+    if section.settings.default_size != blank and size_option != blank
+      assign cur_color = current.options[color_idx]
+      for variant in product.variants
+        assign v_size = variant.options[size_idx]
+        assign v_color = variant.options[color_idx]
+        if v_size == section.settings.default_size and v_color == cur_color and variant.available
+          assign current = variant
+          break
+        endif
+      endfor
+    endif
+
+    assign offers = product.metafields.custom.offers.value
+    assign highlight = product.metafields.custom.highlight.value
+    assign rating = product.metafields.custom.product_rating.value
+    assign rating_count = product.metafields.custom.product_rating_count.value
+  endif
+-%}
+
+<section class="lh lh-feat" id="LhFeatured-{{ section.id }}">
+  {%- if product == blank -%}
+    <div class="lh-wrap lh-feat__empty">Choose a product for this section in the theme customizer.</div>
+  {%- else -%}
+    <lh-featured-product class="lh-wrap lh-feat__inner" data-section="{{ section.id }}" data-product-id="{{ product.id }}">
+      {%- comment -%} ---------- Gallery ---------- {%- endcomment -%}
+      <div class="lh-feat__gallery">
+        <div class="lh-feat__main">
+          <div class="lh-feat__track" data-track tabindex="0" aria-label="{{ product.title | escape }} images">
+            {%- for media in product.media -%}
+              {%- if media.media_type == 'image' -%}
+                {%- liquid
+                  assign slide_loading = 'lazy'
+                  if forloop.first
+                    assign slide_loading = 'eager'
+                  endif
+                -%}
+                {{
+                  media.preview_image
+                  | image_url: width: 1240
+                  | image_tag:
+                    class: 'lh-feat__slide',
+                    widths: '400, 620, 900, 1240',
+                    sizes: '(min-width: 1100px) 620px, (min-width: 768px) 620px, 92vw',
+                    loading: slide_loading,
+                    alt: media.alt
+                }}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if product.media.size > 1 -%}
+            <button type="button" class="lh-feat__arrow lh-feat__arrow--prev" data-step="-1" aria-label="Previous image">
+              {%- render 'lh-icon', icon: 'chevron-left' -%}
+            </button>
+            <button type="button" class="lh-feat__arrow lh-feat__arrow--next" data-step="1" aria-label="Next image">
+              {%- render 'lh-icon', icon: 'chevron-right' -%}
+            </button>
+          {%- endif -%}
+        </div>
+
+        {%- if product.media.size > 1 -%}
+          <div class="lh-feat__thumbs" data-thumbs>
+            {%- for media in product.media -%}
+              {%- if media.media_type == 'image' -%}
+                <button
+                  type="button"
+                  class="lh-feat__thumb"
+                  data-index="{{ forloop.index0 }}"
+                  aria-label="Show image {{ forloop.index }}"
+                  {% if forloop.first %}aria-current="true"{% endif %}
+                >
+                  {{ media.preview_image | image_url: width: 168, height: 168, crop: 'center' | image_tag: alt: '', loading: 'lazy', width: 84, height: 84 }}
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <div class="lh-feat__dots" data-dots aria-hidden="true">
+            {%- for media in product.media -%}
+              <span class="lh-feat__dot{% if forloop.first %} is-active{% endif %}"></span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ---------- Product info ---------- {%- endcomment -%}
+      <div class="lh-feat__info">
+        <div class="lh-feat__meta">
+          {%- if product.metafields.custom.badge.value != blank -%}
+            <span class="lh-badge lh-feat__badge">{{ product.metafields.custom.badge.value | escape }}</span>
+          {%- endif -%}
+          {%- if rating != blank -%}
+            <p class="lh-feat__rating">
+              {%- render 'lh-icon', icon: 'star', class: 'lh-feat__star' -%}
+              <span class="lh-feat__rating-value">{{ rating.rating | round: 1 }}</span>
+              {%- if rating_count != blank -%}
+                {%- liquid
+                  assign count = rating_count | plus: 0
+                  if count >= 1000
+                    assign thousands = count | divided_by: 1000
+                    assign rest = count | modulo: 1000 | prepend: '00' | slice: -3, 3
+                    assign count_label = thousands | append: ',' | append: rest
+                  else
+                    assign count_label = count
+                  endif
+                -%}
+                <span class="lh-feat__rating-count">({{ count_label }}+ Reviews)</span>
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        </div>
+
+        <h2 class="lh-feat__title lh-display">{{ product.title | escape }}</h2>
+
+        <div class="lh-feat__price">
+          <div class="lh-feat__price-row">
+            <span class="lh-feat__now" data-price>{{ current.price | money }}</span>
+            <s class="lh-feat__was" data-compare {% unless current.compare_at_price > current.price %}hidden{% endunless %}>
+              {{- current.compare_at_price | money -}}
+            </s>
+            {%- liquid
+              assign save_percent = 0
+              if current.compare_at_price > current.price
+                assign save_percent = current.compare_at_price | minus: current.price | times: 100.0 | divided_by: current.compare_at_price | round
+              endif
+            -%}
+            <span class="lh-feat__save" data-save {% if save_percent == 0 %}hidden{% endif %}>
+              SAVE <span data-save-value>{{ save_percent }}</span>%
+            </span>
+          </div>
+          {%- if section.settings.tax_note != blank -%}
+            <p class="lh-feat__tax">{{ section.settings.tax_note | escape }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- if highlight != blank -%}
+          <div class="lh-feat__highlight">
+            {%- render 'lh-icon', icon: 'check-circle', class: 'lh-feat__highlight-icon' -%}
+            <div>
+              <p class="lh-feat__highlight-title">{{ highlight.title.value | escape }}</p>
+              <p class="lh-feat__highlight-text">
+                {{ highlight.description.value | escape }}
+                {%- if highlight.link_label.value != blank %}
+                  {% if highlight.link_url.value != blank -%}
+                    <a href="{{ highlight.link_url.value }}">{{ highlight.link_label.value | escape }}</a>
+                  {%- else -%}
+                    {{ highlight.link_label.value | escape }}
+                  {%- endif -%}
+                {%- endif -%}
+              </p>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if color_option != blank -%}
+          {%- assign current_color = current.options[color_idx] -%}
+          <fieldset class="lh-feat__option">
+            <legend class="lh-feat__label">
+              {{ color_option.name | upcase }}: <span data-color-label>{{ current_color | upcase }}</span>
+            </legend>
+            <div class="lh-feat__swatches">
+              {%- for value in color_option.values -%}
+                {%- liquid
+                  assign value_name = value.name | default: value
+                  assign swatch_handle = value_name | handleize
+                  assign swatch_hex = shop.metaobjects.colour_swatch[swatch_handle].color.value | append: ''
+                -%}
+                <button
+                  type="button"
+                  class="lh-feat__swatch"
+                  data-color="{{ value_name | escape }}"
+                  aria-pressed="{% if value_name == current_color %}true{% else %}false{% endif %}"
+                  aria-label="{{ value_name | escape }}"
+                  style="--swatch: {{ swatch_hex | default: '#cccccc' }};"
+                >
+                  <span class="lh-feat__swatch-dot"></span>
+                </button>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        {%- if size_option != blank -%}
+          <fieldset class="lh-feat__option">
+            <legend class="lh-feat__label">{{ section.settings.size_label | escape }}</legend>
+            <div class="lh-feat__sizes">
+              {%- assign current_size = current.options[size_idx] -%}
+              {%- for value in size_option.values -%}
+                {%- liquid
+                  assign value_name = value.name | default: value
+                  assign pill_variant = blank
+                  for variant in product.variants
+                    if variant.options[size_idx] == value_name and variant.options[color_idx] == current_color
+                      assign pill_variant = variant
+                      break
+                    endif
+                  endfor
+                -%}
+                <button
+                  type="button"
+                  class="lh-feat__pill"
+                  data-size="{{ value_name | escape }}"
+                  aria-pressed="{% if value_name == current_size %}true{% else %}false{% endif %}"
+                  {% unless pill_variant.available %}disabled{% endunless %}
+                >
+                  {{- value_name | escape -}}
+                  <span class="lh-feat__ribbon" data-ribbon {% if pill_variant.metafields.custom.ribbon.value == blank %}hidden{% endif %}>
+                    {{- pill_variant.metafields.custom.ribbon.value | escape -}}
+                  </span>
+                </button>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        <div class="lh-feat__buy">
+          <div class="lh-feat__buy-row">
+            <div class="lh-feat__qty">
+              <button type="button" class="lh-feat__qty-btn" data-qty="-1" aria-label="Decrease quantity" disabled>−</button>
+              <output class="lh-feat__qty-value" data-qty-value aria-live="polite">01</output>
+              <button type="button" class="lh-feat__qty-btn" data-qty="1" aria-label="Increase quantity">+</button>
+            </div>
+            <button type="button" class="lh-btn lh-btn--primary lh-btn--square lh-feat__add" data-add {% unless current.available %}disabled{% endunless %}>
+              <span data-add-label>{% if current.available %}Add to cart{% else %}Sold out{% endif %}</span>
+              {%- render 'lh-icon', icon: 'arrow-right', class: 'lh-btn__arrow' -%}
+            </button>
+          </div>
+          <button type="button" class="lh-feat__buy-now" data-buy-now {% unless current.available %}disabled{% endunless %}>Buy it now</button>
+        </div>
+
+        {%- if offers != blank -%}
+          <ul class="lh-feat__offers">
+            {%- for offer in offers -%}
+              {%- liquid
+                assign percent_left = 100 | minus: offer.discount_percent.value
+                assign offer_price = current.price | times: percent_left | divided_by: 100.0 | round
+              -%}
+              <li class="lh-feat__offer">
+                {%- render 'lh-icon', icon: 'offer', class: 'lh-feat__offer-icon' -%}
+                <div class="lh-feat__offer-text">
+                  <p class="lh-feat__offer-title">Get it for <span data-offer-price="{{ forloop.index0 }}">{{ offer_price | money }}</span></p>
+                  <p class="lh-feat__offer-sub">{{ offer.description.value | escape }}</p>
+                </div>
+                <button type="button" class="lh-feat__copy" data-copy="{{ offer.code.value | escape }}" aria-label="Copy code {{ offer.code.value | escape }}">
+                  <span class="lh-feat__copy-icon">{%- render 'lh-icon', icon: 'copy' -%}</span>
+                  <span class="lh-feat__copied" aria-hidden="true">Copied</span>
+                </button>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%}
+        Per-variant data for the browser. Prices, compare-at, "Save X%" and every
+        "Get it for" price are worked out here in Liquid.
+      {%- endcomment -%}
+      <script type="application/json" data-variants>
+        {
+          "colorIndex": {% if color_option != blank %}{{ color_idx }}{% else %}null{% endif %},
+          "sizeIndex": {% if size_option != blank %}{{ size_idx }}{% else %}null{% endif %},
+          "current": {{ current.id }},
+          "variants": [
+            {%- for variant in product.variants -%}
+              {%- liquid
+                assign v_save = 0
+                if variant.compare_at_price > variant.price
+                  assign v_save = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+                endif
+                assign media_index = 0
+                for media in product.media
+                  if media.id == variant.featured_media.id
+                    assign media_index = forloop.index0
+                  endif
+                endfor
+              -%}
+              {
+                "id": {{ variant.id }},
+                "options": {{ variant.options | json }},
+                "available": {{ variant.available | json }},
+                "price": {{ variant.price | money | json }},
+                "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %},
+                "save": {{ v_save }},
+                "ribbon": {{ variant.metafields.custom.ribbon.value | default: '' | json }},
+                "mediaIndex": {% if variant.featured_media %}{{ media_index }}{% else %}null{% endif %},
+                "offers": [
+                  {%- for offer in offers -%}
+                    {%- assign percent_left = 100 | minus: offer.discount_percent.value -%}
+                    {{ variant.price | times: percent_left | divided_by: 100.0 | round | money | json }}{% unless forloop.last %},{% endunless %}
+                  {%- endfor -%}
+                ]
+              }{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        }
+      </script>
+    </lh-featured-product>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "LH Featured product",
+  "class": "lh-section-featured",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "default_size", "label": "Pre-selected size", "default": "M", "info": "Size selected when the page loads (in the first available colour)" },
+    { "type": "text", "id": "tax_note", "label": "Price note", "default": "MRP inclusive of all taxes" },
+    { "type": "text", "id": "size_label", "label": "Size label", "default": "SELECT SIZE" },
+    { "type": "header", "content": "Option names" },
+    { "type": "text", "id": "color_option", "label": "Colour option name", "default": "Color" },
+    { "type": "text", "id": "size_option", "label": "Size option name", "default": "Size" }
+  ],
+  "presets": [{ "name": "LH Featured product" }]
+}
+{% endschema %}

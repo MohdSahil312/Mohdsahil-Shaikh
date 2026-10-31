@@ -1,0 +1,49 @@
+{%- comment -%}
+  Loomhaus — Footer
+  Brand name + tagline and two menus picked in the customizer
+  (Online Store → Navigation). Menu titles are used as the column headings.
+{%- endcomment -%}
+{{ 'lh-footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="lh lh-footer">
+  <div class="lh-wrap lh-footer__inner">
+    <div class="lh-footer__brand">
+      <p class="lh-footer__logo lh-display">{{ section.settings.brand | default: shop.name | escape }}</p>
+      {%- if section.settings.tagline != blank -%}
+        <p class="lh-footer__tagline">{{ section.settings.tagline | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="lh-footer__menus">
+      {%- assign menu_keys = 'menu_1,menu_2' | split: ',' -%}
+      {%- for key in menu_keys -%}
+        {%- assign menu = section.settings[key] -%}
+        {%- if menu.links.size > 0 -%}
+          <nav class="lh-footer__col" aria-label="{{ menu.title | escape }}">
+            <h2 class="lh-footer__heading">{{ menu.title | upcase | escape }}</h2>
+            <ul class="lh-footer__links">
+              {%- for link in menu.links -%}
+                <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "LH Footer",
+  "class": "lh-section-footer",
+  "settings": [
+    { "type": "text", "id": "brand", "label": "Brand name", "default": "Loomhaus" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Clothes made to be worn for years, not seasons." },
+    { "type": "link_list", "id": "menu_1", "label": "First menu", "default": "main-menu" },
+    { "type": "link_list", "id": "menu_2", "label": "Second menu", "default": "footer" }
+  ],
+  "presets": [{ "name": "LH Footer" }],
+  "enabled_on": { "groups": ["footer"] }
+}
+{% endschema %}

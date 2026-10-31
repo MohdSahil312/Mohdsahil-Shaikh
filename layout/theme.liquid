@@ -281,6 +281,28 @@
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
+    {%- comment -%} Loomhaus: fonts, shared styles and scripts {%- endcomment -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Cabin:wght@400;500;600;700&family=Lilita+One&display=swap"
+    >
+    {{ 'lh-base.css' | asset_url | stylesheet_tag }}
+    <script>
+      window.LH_CONFIG = {
+        moneyFormat: {{ shop.money_format | json }},
+        strings: {
+          addToCart: 'Add to cart',
+          soldOut: 'Sold out',
+          chooseSize: 'Please choose a size',
+          copied: 'Copied',
+          cartError: 'Something went wrong. Please try again.'
+        }
+      };
+    </script>
+    <script src="{{ 'lh-theme.js' | asset_url }}" defer="defer"></script>
+
     {%- if settings.cart_type == 'drawer' -%}
       {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
       {{ 'component-cart.css' | asset_url | stylesheet_tag }}
@@ -343,6 +365,10 @@
     </main>
 
     {% sections 'footer-group' %}
+
+    {%- comment -%} Loomhaus: cart drawer (static section, re-rendered via the Section Rendering API) and quick view {%- endcomment -%}
+    {% section 'lh-cart-drawer' %}
+    {% render 'lh-quick-view' %}
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
