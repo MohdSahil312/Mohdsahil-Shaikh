@@ -21,6 +21,7 @@
   color: var(--lh-white);
   font-size: 17px;
   font-weight: 600;
+  line-height: 21px; /* Figma: 53px strip */
   white-space: nowrap;
 }
 .lh-marquee__sep { color: var(--lh-sec); }
@@ -33,5 +34,5 @@
 }
 @media (max-width: 767px) {
   .lh-marquee { padding: 12px 0 12px 14px; }
-  .lh-marquee__group { gap: 18px; padding-right: 18px; font-size: 14px; }
+  .lh-marquee__group { gap: 18px; padding-right: 18px; font-size: 14px; line-height: 17px; }
 }

@@ -38,11 +38,13 @@
   display: block;
   font-size: 26px;
   font-weight: 700;
+  line-height: 31px;
 }
 .lh-hero__stat-label {
   display: block;
   margin-top: 2px;
   font-size: 13px;
+  line-height: 16px;
   color: var(--lh-text-2);
 }
 
