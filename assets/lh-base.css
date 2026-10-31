@@ -29,6 +29,10 @@
   --lh-gutter: clamp(18px, 6.95vw, 100px);
   --lh-max: 1440px;
 }
+/* Mobile frames in Figma use an 18px side gutter */
+@media (max-width: 767px) {
+  :root { --lh-gutter: 18px; }
+}
 
 /* ---------- Root reset (scopes out Dawn's base.css typography) ----------
    The reset uses `.lh :where(...)` so it has the weight of ONE class:
