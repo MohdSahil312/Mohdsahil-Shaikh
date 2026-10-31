@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
@@ -8,11 +17,13 @@
         "brand": "Loomhaus",
         "tagline": "Clothes made to be worn for years, not seasons.",
         "heading_1": "Shop",
-        "menu_1": "shop",
+        "menu_1": "footer",
         "heading_2": "Help",
-        "menu_2": "help"
+        "menu_2": "footer-menus-help"
       }
     }
   },
-  "order": ["lh_footer"]
+  "order": [
+    "lh_footer"
+  ]
 }
