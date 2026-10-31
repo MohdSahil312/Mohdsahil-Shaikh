@@ -30,7 +30,10 @@
   --lh-max: 1440px;
 }
 
-/* ---------- Root reset (scopes out Dawn's base.css typography) ---------- */
+/* ---------- Root reset (scopes out Dawn's base.css typography) ----------
+   The reset uses `.lh :where(...)` so it has the weight of ONE class:
+   it beats Dawn's element selectors (h1, a, button...) but loses to every
+   Loomhaus component class that comes later in the cascade. */
 .lh {
   font-family: var(--lh-font-body);
   font-size: 16px;
@@ -44,31 +47,31 @@
 .lh *::after {
   box-sizing: border-box;
 }
-.lh :is(h1, h2, h3, h4, p, ul, ol, figure) {
+.lh :where(h1, h2, h3, h4, p, ul, ol, li, figure, fieldset, legend) {
   margin: 0;
   padding: 0;
-  letter-spacing: inherit;
-  line-height: inherit;
-}
-.lh :is(h1, h2, h3, h4) {
   font-family: inherit;
+  font-size: inherit;
   font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
   color: inherit;
 }
-.lh ul { list-style: none; }
-.lh img { display: block; max-width: 100%; }
-.lh a { color: inherit; }
-.lh button {
+.lh :where(ul, ol) { list-style: none; }
+.lh :where(img) { display: block; max-width: 100%; }
+.lh :where(a) { color: inherit; }
+.lh :where(button) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
   font: inherit;
   color: inherit;
-  background: none;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
   letter-spacing: inherit;
+  text-align: center;
+  cursor: pointer;
 }
-.lh button:disabled { cursor: not-allowed; }
+.lh :where(button:disabled) { cursor: not-allowed; }
 .lh :focus-visible {
   outline: 2px solid var(--lh-ink);
   outline-offset: 3px;
@@ -144,8 +147,11 @@
 }
 .lh-btn[aria-busy='true'] { cursor: progress; }
 
-/* ---------- Overlay shared by quick view and cart drawer ---------- */
-.lh-overlay {
+/* ---------- Overlay shared by quick view and cart drawer ----------
+   `:empty` is listed too because Dawn hides every empty div (div:empty). */
+.lh-overlay,
+.lh-overlay:empty {
+  display: block;
   position: fixed;
   inset: 0;
   z-index: 200;

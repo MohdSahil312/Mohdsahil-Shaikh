@@ -7,7 +7,9 @@
       "settings": {
         "brand": "Loomhaus",
         "tagline": "Clothes made to be worn for years, not seasons.",
+        "heading_1": "Shop",
         "menu_1": "shop",
+        "heading_2": "Help",
         "menu_2": "help"
       }
     }

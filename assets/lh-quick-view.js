@@ -55,7 +55,7 @@
       this.overlay.classList.add('is-open');
       requestAnimationFrame(() => {
         this.classList.add('is-open');
-        this.querySelector('.lh-qv__close').focus({ preventScroll: true });
+        this.dialog.focus({ preventScroll: true });
       });
     }
 
