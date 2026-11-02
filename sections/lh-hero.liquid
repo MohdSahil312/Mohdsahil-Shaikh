@@ -1,0 +1,133 @@
+{%- comment -%}
+  Loomhaus — Hero banner
+  Badge, heading, text, "Shop now" button, stats (blocks), the arched hero
+  image over a circle, and a floating card that pulls its image and title from
+  a product picked in the customizer.
+{%- endcomment -%}
+{{ 'lh-hero.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign card_product = section.settings.card_product
+  assign image = section.settings.image
+-%}
+
+<section class="lh lh-hero" aria-labelledby="LhHeroHeading-{{ section.id }}">
+  <div class="lh-wrap lh-hero__inner">
+    <div class="lh-hero__content">
+      {%- if section.settings.badge != blank -%}
+        <span class="lh-badge lh-hero__badge">{{ section.settings.badge | escape }}</span>
+      {%- endif -%}
+
+      <h1 id="LhHeroHeading-{{ section.id }}" class="lh-hero__heading lh-display">
+        {{- section.settings.heading | escape -}}
+      </h1>
+
+      {%- if section.settings.text != blank -%}
+        <div class="lh-hero__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link | default: '#' }}" class="lh-btn lh-btn--primary lh-hero__button">
+          {{- section.settings.button_label | escape -}}
+          {%- render 'lh-icon', icon: 'arrow-right', class: 'lh-btn__arrow' -%}
+        </a>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="lh-hero__stats">
+          {%- for block in section.blocks -%}
+            <li class="lh-hero__stat" {{ block.shopify_attributes }}>
+              <span class="lh-hero__stat-value lh-display">{{ block.settings.value | escape }}</span>
+              <span class="lh-hero__stat-label">{{ block.settings.label | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="lh-hero__visual">
+      <span class="lh-hero__circle" aria-hidden="true"></span>
+      {%- if image != blank -%}
+        {{
+          image
+          | image_url: width: 1100
+          | image_tag:
+            class: 'lh-hero__image',
+            widths: '440, 600, 880, 1100',
+            sizes: '(min-width: 1100px) 440px, (min-width: 768px) 380px, 85vw',
+            loading: 'eager',
+            fetchpriority: 'high',
+            alt: image.alt
+        }}
+      {%- else -%}
+        {%- comment -%} Default photo shipped with the theme until an image is picked in the customizer {%- endcomment -%}
+        <img
+          class="lh-hero__image"
+          src="{{ 'lh-hero-default.jpg' | asset_url }}"
+          alt="Woman walking down a city street in a yellow wool jumper"
+          width="928"
+          height="1152"
+          loading="eager"
+          fetchpriority="high"
+        >
+      {%- endif -%}
+
+      {%- if section.settings.show_card and card_product != blank -%}
+        <a href="{{ card_product.url }}" class="lh-hero__card">
+          {%- if card_product.featured_image -%}
+            {{
+              card_product.featured_image
+              | image_url: width: 72, height: 72, crop: 'top'
+              | image_tag: class: 'lh-hero__card-image', width: 36, height: 36, alt: ''
+            }}
+          {%- endif -%}
+          <span class="lh-hero__card-text">
+            <span class="lh-hero__card-title">{{ card_product.title | escape }}</span>
+            <span class="lh-hero__card-sub">{{ section.settings.card_text | escape }}</span>
+          </span>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "LH Hero banner",
+  "class": "lh-section-hero",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "badge", "label": "Badge", "default": "NEW SEASON  ·  AUTUMN / WINTER" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Winter Edit" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop now" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Hero image", "info": "Portrait image, about 880 × 1080 px" },
+    { "type": "header", "content": "Floating card" },
+    { "type": "checkbox", "id": "show_card", "label": "Show floating card", "default": true, "info": "Hidden on mobile, as in the design" },
+    { "type": "product", "id": "card_product", "label": "Product" },
+    { "type": "text", "id": "card_text", "label": "Card text", "default": "Bestseller this week" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "4.8★" },
+        { "type": "text", "id": "label", "label": "Label", "default": "2,000+ reviews" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LH Hero banner",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "4.8★", "label": "2,000+ reviews" } },
+        { "type": "stat", "settings": { "value": "100%", "label": "organic cotton" } },
+        { "type": "stat", "settings": { "value": "30 days", "label": "free returns" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

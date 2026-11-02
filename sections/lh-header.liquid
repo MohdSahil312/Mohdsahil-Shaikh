@@ -1,0 +1,67 @@
+{%- comment -%}
+  Loomhaus — Header
+  Logo (text, or an uploaded image), centred header text, a secondary button and
+  the cart icon. The cart count is rendered here on page load and kept in sync
+  by LH.cart (assets/lh-theme.js) after every cart change; clicking the icon
+  opens the Loomhaus cart drawer.
+{%- endcomment -%}
+{{ 'lh-header.css' | asset_url | stylesheet_tag }}
+
+<header class="lh lh-header">
+  <div class="lh-wrap lh-header__inner">
+    <a href="{{ routes.root_url }}" class="lh-header__logo lh-display">
+      {%- if section.settings.logo_image != blank -%}
+        {{
+          section.settings.logo_image
+          | image_url: width: 600
+          | image_tag:
+            alt: shop.name,
+            width: section.settings.logo_width,
+            style: 'height:auto',
+            sizes: '262px'
+        }}
+      {%- else -%}
+        {{ section.settings.logo_text | default: shop.name | escape }}
+      {%- endif -%}
+    </a>
+
+    {%- if section.settings.header_text != blank -%}
+      <p class="lh-header__text">{{ section.settings.header_text | escape }}</p>
+    {%- endif -%}
+
+    <div class="lh-header__actions">
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link | default: '#' }}" class="lh-btn lh-btn--secondary lh-header__button">
+          {{- section.settings.button_label | escape -}}
+          {%- render 'lh-icon', icon: 'arrow-right', class: 'lh-btn__arrow' -%}
+        </a>
+      {%- endif -%}
+
+      <a href="{{ routes.cart_url }}" class="lh-header__cart" data-lh-open-cart aria-label="Open cart">
+        {%- render 'lh-icon', icon: 'cart', class: 'lh-header__cart-icon' -%}
+        <span class="lh-header__count" data-lh-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>
+          {{- cart.item_count -}}
+        </span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "LH Header",
+  "class": "lh-section-header",
+  "settings": [
+    { "type": "header", "content": "Logo" },
+    { "type": "text", "id": "logo_text", "label": "Logo text", "default": "Loomhaus" },
+    { "type": "image_picker", "id": "logo_image", "label": "Logo image", "info": "Replaces the logo text when set" },
+    { "type": "range", "id": "logo_width", "label": "Logo image width", "min": 80, "max": 262, "step": 2, "unit": "px", "default": 160 },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "header_text", "label": "Header text", "default": "Clothes made to be worn for years, not seasons." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the drop" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "LH Header" }],
+  "enabled_on": { "groups": ["header"] }
+}
+{% endschema %}

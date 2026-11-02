@@ -1,0 +1,24 @@
+/* Loomhaus — Announcement bar */
+.lh-announce {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 10px 16px;
+  overflow: hidden;
+  background: var(--lh-ink);
+  color: var(--lh-white);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px; /* fixed so the ✦ glyph cannot grow the bar (Figma: 36px) */
+  white-space: nowrap;
+}
+.lh-announce__sep { color: var(--lh-sec); }
+.lh-announce a { text-decoration: none; }
+.lh-announce a:hover { text-decoration: underline; }
+
+@media (max-width: 767px) {
+  .lh-announce { padding-block: 9px; font-size: 12px; line-height: 15px; }
+  .lh-announce__sep,
+  .lh-announce__item--extra { display: none; }
+}

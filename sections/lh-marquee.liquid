@@ -1,0 +1,58 @@
+{%- comment -%}
+  Loomhaus — Marquee strip
+  The list of items is repeated inside one track; the track moves by exactly
+  half its width, so the loop never shows a gap. CSS only: pauses on
+  hover and stops for people who prefer reduced motion.
+{%- endcomment -%}
+{{ 'lh-marquee.css' | asset_url | stylesheet_tag }}
+
+{%- capture items -%}
+  {%- for block in section.blocks -%}
+    <span class="lh-marquee__item" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</span>
+    <span class="lh-marquee__sep">✦</span>
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture label -%}{%- for block in section.blocks -%}{{ block.settings.text | escape }}{% unless forloop.last %}, {% endunless %}{%- endfor -%}{%- endcapture -%}
+
+<div class="lh lh-marquee" style="--lh-marquee-duration: {{ section.settings.duration }}s;">
+  <p class="visually-hidden">{{ label }}</p>
+  <div class="lh-marquee__track" aria-hidden="true">
+    {%- comment -%}
+      Six copies: each half of the track (3 copies) is wider than large screens,
+      so moving the track by -50% always loops seamlessly.
+    {%- endcomment -%}
+    {%- for i in (1..6) -%}
+      <div class="lh-marquee__group">{{ items }}</div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "LH Marquee strip",
+  "class": "lh-section-marquee",
+  "settings": [
+    { "type": "range", "id": "duration", "label": "Loop duration", "min": 10, "max": 80, "step": 2, "unit": "s", "default": 36, "info": "Lower is faster" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "Organic cotton" }]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LH Marquee strip",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Organic cotton" } },
+        { "type": "item", "settings": { "text": "Made to last" } },
+        { "type": "item", "settings": { "text": "Sizes XS to L" } },
+        { "type": "item", "settings": { "text": "Free returns" } },
+        { "type": "item", "settings": { "text": "Ethically made" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

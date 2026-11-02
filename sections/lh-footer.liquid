@@ -1,0 +1,55 @@
+{%- comment -%}
+  Loomhaus — Footer
+  Brand name + tagline and two menus picked in the customizer
+  (Content → Menus). Column headings are settings (falling back to the menu title).
+{%- endcomment -%}
+{{ 'lh-footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="lh lh-footer">
+  <div class="lh-wrap lh-footer__inner">
+    <div class="lh-footer__brand">
+      <p class="lh-footer__logo lh-display">{{ section.settings.brand | default: shop.name | escape }}</p>
+      {%- if section.settings.tagline != blank -%}
+        <p class="lh-footer__tagline">{{ section.settings.tagline | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="lh-footer__menus">
+      {%- for i in (1..2) -%}
+        {%- liquid
+          assign menu_key = 'menu_' | append: i
+          assign heading_key = 'heading_' | append: i
+          assign menu = section.settings[menu_key]
+          assign heading = section.settings[heading_key] | default: menu.title
+        -%}
+        {%- if menu.links.size > 0 -%}
+          <nav class="lh-footer__col" aria-label="{{ heading | escape }}">
+            <h2 class="lh-footer__heading">{{ heading | upcase | escape }}</h2>
+            <ul class="lh-footer__links">
+              {%- for link in menu.links -%}
+                <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "LH Footer",
+  "class": "lh-section-footer",
+  "settings": [
+    { "type": "text", "id": "brand", "label": "Brand name", "default": "Loomhaus" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Clothes made to be worn for years, not seasons." },
+    { "type": "text", "id": "heading_1", "label": "First menu heading", "default": "Shop", "info": "Uses the menu title when empty" },
+    { "type": "link_list", "id": "menu_1", "label": "First menu", "default": "main-menu" },
+    { "type": "text", "id": "heading_2", "label": "Second menu heading", "default": "Help", "info": "Uses the menu title when empty" },
+    { "type": "link_list", "id": "menu_2", "label": "Second menu", "default": "footer" }
+  ],
+  "presets": [{ "name": "LH Footer" }],
+  "enabled_on": { "groups": ["footer"] }
+}
+{% endschema %}

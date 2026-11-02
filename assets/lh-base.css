@@ -1,0 +1,196 @@
+/*
+  Loomhaus — shared styles
+  -------------------------------------------------------------
+  Design tokens (from the Figma variables) and the pieces used by
+  more than one section: layout wrapper, buttons, badge, overlay.
+  Every Loomhaus element sits inside a `.lh` root, which resets the
+  inherited Dawn body styles (62.5% rem base, letter-spacing, line-height)
+  so values can be written in px exactly as in Figma.
+*/
+
+:root {
+  --lh-page: #f6f3ed;          /* surface/page */
+  --lh-ink: #292a26;           /* primary/button-and-text, text/main */
+  --lh-white: #ffffff;         /* surface/white */
+  --lh-sec: #e4ded3;           /* surface/secondary */
+  --lh-sec-hover: #d8d2c7;     /* secondary button hover */
+  --lh-border: #d8d2c7;        /* border/default */
+  --lh-text-2: #706f68;        /* text/secondary */
+  --lh-accent: #777a67;        /* accent/label, primary hover */
+  --lh-sale: #8b4038;          /* text/sale */
+  --lh-disabled: #a9aaa8;      /* primary disabled / loading */
+  --lh-muted-bg: #f3f0eb;      /* sold-out pill, disabled qty button */
+  --lh-muted-text: #b3b1aa;
+
+  --lh-font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --lh-font-body: 'Cabin', system-ui, sans-serif;
+  --lh-font-label: 'Lilita One', system-ui, sans-serif;
+
+  --lh-gutter: clamp(18px, 6.95vw, 100px);
+  --lh-max: 1440px;
+}
+/* Mobile frames in Figma use an 18px side gutter */
+@media (max-width: 767px) {
+  :root { --lh-gutter: 18px; }
+}
+
+/* ---------- Root reset (scopes out Dawn's base.css typography) ----------
+   The reset uses `.lh :where(...)` so it has the weight of ONE class:
+   it beats Dawn's element selectors (h1, a, button...) but loses to every
+   Loomhaus component class that comes later in the cascade. */
+.lh {
+  font-family: var(--lh-font-body);
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--lh-ink);
+  -webkit-font-smoothing: antialiased;
+}
+.lh *,
+.lh *::before,
+.lh *::after {
+  box-sizing: border-box;
+}
+.lh :where(h1, h2, h3, h4, p, ul, ol, li, figure, fieldset, legend) {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+.lh :where(ul, ol) { list-style: none; }
+.lh :where(img) { display: block; max-width: 100%; }
+.lh :where(a) { color: inherit; }
+.lh :where(button) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.lh :where(button:disabled) { cursor: not-allowed; }
+.lh :focus-visible {
+  outline: 2px solid var(--lh-ink);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+/* Display font with the optical size used in Figma ("opsz" 14) */
+.lh-display {
+  font-family: var(--lh-font-display);
+  font-variation-settings: 'opsz' 14;
+}
+
+.lh-wrap {
+  max-width: var(--lh-max);
+  margin: 0 auto;
+  padding-inline: var(--lh-gutter);
+}
+
+/* ---------- Badge (pill label in Lilita One) ---------- */
+.lh-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--lh-accent);
+  color: var(--lh-white);
+  font: 400 14px/normal var(--lh-font-label);
+  letter-spacing: 0.04em;
+  white-space: pre;
+}
+
+/* ---------- Buttons (states from the "Interactive states" board) ---------- */
+.lh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font: 700 14px/normal var(--lh-font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.lh-btn__arrow {
+  width: 20px;
+  height: 12px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.lh-btn--primary { background: var(--lh-ink); color: var(--lh-white); }
+.lh-btn--secondary { background: var(--lh-sec); color: var(--lh-ink); }
+.lh-btn--square { border-radius: 8px; }
+.lh-btn--block { width: 100%; }
+
+@media (hover: hover) {
+  /* Primary hover: accent background, arrow slides right, button lifts */
+  .lh-btn--primary:not(:disabled):hover {
+    background: var(--lh-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(41, 42, 38, 0.18);
+  }
+  .lh-btn--secondary:not(:disabled):hover { background: var(--lh-sec-hover); }
+  .lh-btn:not(:disabled):hover .lh-btn__arrow { transform: translateX(4px); }
+}
+.lh-btn--primary:disabled,
+.lh-btn--primary[aria-busy='true'] {
+  background: var(--lh-disabled);
+  color: var(--lh-white);
+  transform: none;
+  box-shadow: none;
+}
+.lh-btn[aria-busy='true'] { cursor: progress; }
+
+/* ---------- Overlay shared by quick view and cart drawer ----------
+   `:empty` is listed too because Dawn hides every empty div (div:empty). */
+.lh-overlay,
+.lh-overlay:empty {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(41, 42, 38, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.lh-overlay.is-open { opacity: 1; visibility: visible; }
+body.lh-locked { overflow: hidden; }
+
+/* ---------- Toast (copy feedback, errors) ---------- */
+.lh-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 400;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--lh-ink);
+  color: var(--lh-white);
+  font: 600 14px/normal var(--lh-font-body);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 16px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.lh-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lh *,
+  .lh-overlay,
+  .lh-toast {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
