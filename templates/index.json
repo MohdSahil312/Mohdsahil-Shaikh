@@ -12,17 +12,40 @@
     "lh_hero": {
       "type": "lh-hero",
       "blocks": {
-        "stat_reviews": { "type": "stat", "settings": { "value": "4.8★", "label": "2,000+ reviews" } },
-        "stat_cotton": { "type": "stat", "settings": { "value": "100%", "label": "organic cotton" } },
-        "stat_returns": { "type": "stat", "settings": { "value": "30 days", "label": "free returns" } }
+        "stat_reviews": {
+          "type": "stat",
+          "settings": {
+            "value": "4.8★",
+            "label": "2,000+ reviews"
+          }
+        },
+        "stat_cotton": {
+          "type": "stat",
+          "settings": {
+            "value": "100%",
+            "label": "organic cotton"
+          }
+        },
+        "stat_returns": {
+          "type": "stat",
+          "settings": {
+            "value": "30 days",
+            "label": "free returns"
+          }
+        }
       },
-      "block_order": ["stat_reviews", "stat_cotton", "stat_returns"],
+      "block_order": [
+        "stat_reviews",
+        "stat_cotton",
+        "stat_returns"
+      ],
       "settings": {
         "badge": "NEW SEASON  ·  AUTUMN / WINTER",
         "heading": "The Winter Edit",
         "text": "<p>Warm layers, honest fabrics and fits that work every day. Discover the pieces our community wears on repeat this season.</p>",
         "button_label": "Shop now",
         "button_link": "shopify://collections/all",
+        "image": "shopify://shop_images/c82ddfed4408df925613612b23d42b5e62b68efa.jpg",
         "show_card": true,
         "card_product": "yellow-wool-jumper",
         "card_text": "Bestseller this week"
@@ -31,26 +54,120 @@
     "lh_marquee": {
       "type": "lh-marquee",
       "blocks": {
-        "item_1": { "type": "item", "settings": { "text": "Organic cotton" } },
-        "item_2": { "type": "item", "settings": { "text": "Made to last" } },
-        "item_3": { "type": "item", "settings": { "text": "Sizes XS to L" } },
-        "item_4": { "type": "item", "settings": { "text": "Free returns" } },
-        "item_5": { "type": "item", "settings": { "text": "Ethically made" } }
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "text": "Organic cotton"
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "text": "Made to last"
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "text": "Sizes XS to L"
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "text": "Free returns"
+          }
+        },
+        "item_5": {
+          "type": "item",
+          "settings": {
+            "text": "Ethically made"
+          }
+        }
       },
-      "block_order": ["item_1", "item_2", "item_3", "item_4", "item_5"],
-      "settings": { "duration": 36 }
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5"
+      ],
+      "settings": {
+        "duration": 36
+      }
     },
     "lh_shop_the_look": {
       "type": "lh-shop-the-look",
       "blocks": {
-        "tile_1": { "type": "tile", "settings": { "product": "ocean-blue-shirt", "x": 48, "y": 27, "mobile_x": 44, "mobile_y": 24 } },
-        "tile_2": { "type": "tile", "settings": { "product": "olive-green-jacket", "x": 52, "y": 39, "mobile_x": 49, "mobile_y": 36 } },
-        "tile_3": { "type": "tile", "settings": { "product": "navy-sport-jacket", "x": 39, "y": 33, "mobile_x": 36, "mobile_y": 30 } },
-        "tile_4": { "type": "tile", "settings": { "product": "striped-silk-blouse", "x": 48, "y": 27, "mobile_x": 44, "mobile_y": 24 } },
-        "tile_5": { "type": "tile", "settings": { "product": "led-high-tops", "x": 40, "y": 52, "mobile_x": 36, "mobile_y": 49 } },
-        "tile_6": { "type": "tile", "settings": { "product": "striped-skirt-and-top", "x": 48, "y": 65, "mobile_x": 44, "mobile_y": 62 } }
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "product": "ocean-blue-shirt",
+            "x": 48,
+            "y": 27,
+            "mobile_x": 44,
+            "mobile_y": 24
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "product": "olive-green-jacket",
+            "x": 52,
+            "y": 39,
+            "mobile_x": 49,
+            "mobile_y": 36
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "product": "navy-sport-jacket",
+            "x": 39,
+            "y": 33,
+            "mobile_x": 36,
+            "mobile_y": 30
+          }
+        },
+        "tile_4": {
+          "type": "tile",
+          "settings": {
+            "product": "striped-silk-blouse",
+            "x": 48,
+            "y": 27,
+            "mobile_x": 44,
+            "mobile_y": 24
+          }
+        },
+        "tile_5": {
+          "type": "tile",
+          "settings": {
+            "product": "led-high-tops",
+            "x": 40,
+            "y": 52,
+            "mobile_x": 36,
+            "mobile_y": 49
+          }
+        },
+        "tile_6": {
+          "type": "tile",
+          "settings": {
+            "product": "striped-skirt-and-top",
+            "x": 48,
+            "y": 65,
+            "mobile_x": 44,
+            "mobile_y": 62
+          }
+        }
       },
-      "block_order": ["tile_1", "tile_2", "tile_3", "tile_4", "tile_5", "tile_6"],
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3",
+        "tile_4",
+        "tile_5",
+        "tile_6"
+      ],
       "settings": {
         "eyebrow": "SHOP THE LOOK",
         "heading": "Loomhaus in the wild",
@@ -69,5 +186,10 @@
       }
     }
   },
-  "order": ["lh_hero", "lh_marquee", "lh_shop_the_look", "lh_featured_product"]
+  "order": [
+    "lh_hero",
+    "lh_marquee",
+    "lh_shop_the_look",
+    "lh_featured_product"
+  ]
 }
